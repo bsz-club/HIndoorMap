@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="titleText" format="string"/>
+    <attr name="titleTextColor" format="color"/>
+    <attr name="titleTextSize" format="dimension"/>
+    <attr name="src" format="integer"/>
+
+    <declare-styleable name="HMapView">
+        <attr name="src"/>
+    </declare-styleable>
+
+</resources>
