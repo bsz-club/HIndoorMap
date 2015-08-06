@@ -13,7 +13,13 @@
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/res/mipmap/ic_launcher.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/res/mipmap/qunguangguangchang7.jpg" charset="GBK" />
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/res/values/attrs.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Interface/OnGetWifiResultListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Interface/OnLimitListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Model/Wifi.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Utils/DatabaseHelper.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Utils/DatabaseManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Utils/ScanLimitModelManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Utils/WifiScanManager.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
