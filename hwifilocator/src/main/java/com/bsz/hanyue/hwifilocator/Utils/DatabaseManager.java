@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.bsz.hanyue.hwifilocator.Model.Wifi;
+import com.bsz.hanyue.hlocatormodel.Model.Wifi;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HIndoorMap.iml" filepath="$PROJECT_DIR$/HIndoorMap.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hlocatormodel/hlocatormodel.iml" filepath="$PROJECT_DIR$/hlocatormodel/hlocatormodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/hmaptoview/hmaptoview.iml" filepath="$PROJECT_DIR$/hmaptoview/hmaptoview.iml" />
       <module fileurl="file://$PROJECT_DIR$/hwifilocator/hwifilocator.iml" filepath="$PROJECT_DIR$/hwifilocator/hwifilocator.iml" />
     </modules>

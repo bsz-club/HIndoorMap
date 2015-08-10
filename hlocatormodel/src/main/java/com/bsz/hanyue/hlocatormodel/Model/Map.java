@@ -1,11 +1,11 @@
-package com.bsz.hanyue.hmaptoview.Model;
+package com.bsz.hanyue.hlocatormodel.Model;
 
 import android.graphics.Bitmap;
 
 import java.util.List;
 
 /**
- * Created by hanyue on 2015/7/28.
+ * Created by hanyue on 2015/8/10.
  */
 public class Map {
 
@@ -15,6 +15,7 @@ public class Map {
     Bitmap mapimage;
     float ruler;//m per px
     List<Icon> iconList;
+    Coordinate pointO;
 
     public int getFloor() {
         return floor;
@@ -64,15 +65,25 @@ public class Map {
         this.ruler = ruler;
     }
 
+    public Coordinate getPointO() {
+        return pointO;
+    }
+
+    public void setPointO(Coordinate pointO) {
+        this.pointO = pointO;
+    }
+
     @Override
     public String toString() {
         return "Map{" +
-                "floor=" + floor +
-                ", id=" + id +
+                "id=" + id +
+                ", floor=" + floor +
                 ", mapimageurl='" + mapimageurl + '\'' +
                 ", mapimage=" + mapimage +
                 ", ruler=" + ruler +
                 ", iconList=" + iconList +
+                ", pointO=" + pointO +
                 '}';
     }
+
 }

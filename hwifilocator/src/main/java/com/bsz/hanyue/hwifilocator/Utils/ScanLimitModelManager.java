@@ -1,95 +1,167 @@
 package com.bsz.hanyue.hwifilocator.Utils;
 
-import android.app.Activity;
-import android.widget.Toast;
+import com.bsz.hanyue.hlocatormodel.Model.Wifi;
+import com.bsz.hanyue.hwifilocator.Interface.OnGotCalculateResultListener;
+import com.bsz.hanyue.hwifilocator.Interface.OnGotWifiResultListener;
 
-import com.bsz.hanyue.hwifilocator.Interface.OnGetWifiResultListener;
-import com.bsz.hanyue.hwifilocator.Interface.OnLimitListener;
-import com.bsz.hanyue.hwifilocator.Model.Wifi;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by hanyue on 2015/7/24.
+ * Created by hanyue on 2015/7/24
  */
 public class ScanLimitModelManager {
 
-    private Activity activity;
     private WifiScanManager wifiScanManager;
     private DatabaseManager databaseManager;
-    private OnLimitListener onLimitListener;
-    private OnGetWifiResultListener onGetWifiResultListener;
+    private ResultCalculator resultCalculator;
+
+    private OnGotWifiResultListener onGotWifiResultListener;
     private Wifi wifi;
     private long time;
     private int count;
 
-    public ScanLimitModelManager(Activity activity, WifiScanManager wifiScanManager, DatabaseManager databaseManager) {
-        this.activity = activity;
+    public ScanLimitModelManager(WifiScanManager wifiScanManager, DatabaseManager databaseManager) {
         this.wifiScanManager = wifiScanManager;
         this.databaseManager = databaseManager;
         timesLimit();
     }
 
-    public void timesLimit() {
-        Toast.makeText(activity, "正在记录扫描次数", Toast.LENGTH_SHORT).show();
+    public ResultCalculator timesLimit() {
+        if (resultCalculator == null){
+            resultCalculator = new ResultCalculator();
+        }
         initState();
-        wifiScanManager.setOnGetWifiResultListener(onGetWifiResultListener = new OnGetWifiResultListener() {
+        removeOldListener();
+        wifiScanManager.setOnGotWifiResultListener(onGotWifiResultListener = new OnGotWifiResultListener() {
             @Override
             public void getScanResult(List<Wifi> wifis) {
                 count++;
                 if (count > 5) {
-                    onLimitListener.onLimit();
+                    resultCalculator.Calculate(databaseManager);
                 }
             }
         });
+        return resultCalculator;
     }
 
-    public void 距离最近的WIFI的储存次数为限() {
-        Toast.makeText(activity, "正在记录WIFI储存次数", Toast.LENGTH_SHORT).show();
+    public ResultCalculator 距离最近的WIFI的储存次数为限() {
+        if (resultCalculator == null){
+            resultCalculator = new ResultCalculator();
+        }
         initState();
-        wifiScanManager.setOnGetWifiResultListener(onGetWifiResultListener = new OnGetWifiResultListener() {
+        removeOldListener();
+        wifiScanManager.setOnGotWifiResultListener(onGotWifiResultListener = new OnGotWifiResultListener() {
             @Override
             public void getScanResult(List<Wifi> wifis) {
                 if (wifis.size() != 0 && count == 0) {
                     wifi = wifis.get(0);
                     count++;
                 }
-                if (databaseManager.getPreWifisByBSSID(wifi.getBssID()).size()>5){
-                    onLimitListener.onLimit();
+                if (databaseManager.getPreWifisByBSSID(wifi.getBssID()).size() > 5) {
+                    resultCalculator.Calculate(databaseManager);
                 }
             }
         });
+        return resultCalculator;
     }
 
-    public void 时间为限() {
-        Toast.makeText(activity, "正在记录时间次数", Toast.LENGTH_SHORT).show();
+    public ResultCalculator 时间为限() {
+        if (resultCalculator == null){
+            resultCalculator = new ResultCalculator();
+        }
         initState();
-        wifiScanManager.setOnGetWifiResultListener(onGetWifiResultListener = new OnGetWifiResultListener() {
+        removeOldListener();
+        wifiScanManager.setOnGotWifiResultListener(onGotWifiResultListener = new OnGotWifiResultListener() {
             @Override
             public void getScanResult(List<Wifi> wifis) {
-                if (count==0){
+                if (count == 0) {
                     time = new Date().getTime();
                 }
-                if (((new Date().getTime()-time)/1000)>10){
-                    onLimitListener.onLimit();
+                if (((new Date().getTime() - time) / 1000) > 10) {
+                    resultCalculator.Calculate(databaseManager);
                 }
             }
         });
+        return resultCalculator;
+    }
+
+    private void removeOldListener() {
+        if (onGotWifiResultListener != null) {
+            wifiScanManager.removeListener(onGotWifiResultListener);
+        }
     }
 
     private void initState() {
-        if (onGetWifiResultListener != null) {
-            wifiScanManager.removeListener(onGetWifiResultListener);
-            onGetWifiResultListener = null;
+        if (onGotWifiResultListener != null) {
+            wifiScanManager.removeListener(onGotWifiResultListener);
+            onGotWifiResultListener = null;
         }
         count = 0;
         time = 0;
         wifi = null;
     }
 
-    public void setOnLimitListener(OnLimitListener onLimitListener) {
-        this.onLimitListener = onLimitListener;
+    public class ResultCalculator {
+
+        private OnGotCalculateResultListener onGotCalculateResultListener;
+
+        private void Calculate(DatabaseManager databaseManager){
+            List<Wifi> properWifis = getProperValue(databaseManager);
+            databaseManager.clearPreWifi();
+            if (onGotCalculateResultListener != null){
+                onGotCalculateResultListener.getWifiEnvironment(properWifis);
+            }
+        }
+
+        //得到临时数据库内wifi的特征值
+        private List<Wifi> getProperValue(DatabaseManager databaseManager){
+            return getAverageWifis(databaseManager);
+        }
+
+        private List<Wifi> getAverageWifis(DatabaseManager databaseManager) {
+            List<Wifi> wifis = new ArrayList<>();
+            List<String> bssIDs = getWifiInDatabase(databaseManager);
+            for (int i = 0; i < bssIDs.size(); i++) {
+                Wifi wifi = getAverage(databaseManager.getPreWifisByBSSID(bssIDs.get(i)));
+                wifis.add(wifi);
+            }
+            return wifis;
+        }
+
+        private List<String> getWifiInDatabase(DatabaseManager databaseManager) {
+            List<String> allBssids = databaseManager.getAllPreBSSID();
+            List<String> bssids = new ArrayList<>();
+            for (int i = 0; i < allBssids.size(); i++) {
+                boolean flag = true;
+                for (int j = 0; j < bssids.size(); j++) {
+                    if (bssids.get(j).equals(allBssids.get(i))) {
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    bssids.add(allBssids.get(i));
+                }
+            }
+            return bssids;
+        }
+
+        private Wifi getAverage(List<Wifi> wifis) {
+            int sub = 0;
+            for (int i = 0; i < wifis.size(); i++) {
+                sub += wifis.get(i).getLevel();
+            }
+            int averageLevel = sub / wifis.size();
+            Wifi wifi = wifis.get(0);
+            wifi.setLevel(averageLevel);
+            return wifi;
+        }
+
+        public void setOnGotCalculateResultListener(OnGotCalculateResultListener onGotCalculateResultListener){
+            this.onGotCalculateResultListener = onGotCalculateResultListener;
+        }
+
     }
 
 }

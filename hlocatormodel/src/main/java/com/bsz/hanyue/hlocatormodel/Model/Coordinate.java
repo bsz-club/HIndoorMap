@@ -1,20 +1,19 @@
-package com.bsz.hanyue.hmaptoview.Model;
+package com.bsz.hanyue.hlocatormodel.Model;
 
 /**
- * Created by hanyue on 2015/7/28.
+ * Created by hanyue on 2015/8/10.
  */
-public class LocationPoint {
+public class Coordinate {
 
     float x;
     float y;
-    float roate;
 
-    public float getRoate() {
-        return roate;
+    public Coordinate() {
     }
 
-    public void setRoate(float roate) {
-        this.roate = roate;
+    public Coordinate(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
     public float getX() {
@@ -35,10 +34,10 @@ public class LocationPoint {
 
     @Override
     public String toString() {
-        return "LocationPoint{" +
-                "roate=" + roate +
-                ", x=" + x +
+        return "Coordinate{" +
+                "x=" + x +
                 ", y=" + y +
                 '}';
     }
+
 }

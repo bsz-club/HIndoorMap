@@ -1,9 +1,9 @@
-package com.bsz.hanyue.hmaptoview.Model;
+package com.bsz.hanyue.hlocatormodel.Model;
 
 import android.graphics.Bitmap;
 
 /**
- * Created by hanyue on 2015/7/28.
+ * Created by hanyue on 2015/8/10.
  */
 public class Icon {
 
@@ -93,4 +93,5 @@ public class Icon {
                 ", storeId=" + storeId +
                 '}';
     }
+
 }

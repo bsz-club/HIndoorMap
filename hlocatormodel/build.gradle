@@ -19,7 +19,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile project(':hlocatormodel')
+    compile 'com.android.support:appcompat-v7:22.+'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }

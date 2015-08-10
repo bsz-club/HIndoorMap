@@ -5,12 +5,31 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.bsz.hanyue.hlocatormodel.Model.Map;
+import com.bsz.hanyue.hlocatormodel.Model.Wifi;
+import com.bsz.hanyue.hwifilocator.Interface.OnGotCalculateResultListener;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        HWifiLocator.with(this).强制扫描().时间为限().setOnGotCalculateResultListener(new OnGotCalculateResultListener() {
+            @Override
+            public void getMap(Map map) {
+
+            }
+
+            @Override
+            public void getWifiEnvironment(List<Wifi> wifis) {
+
+            }
+        });
+
     }
 
     @Override

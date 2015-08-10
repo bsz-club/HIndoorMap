@@ -1,55 +1,65 @@
 package com.bsz.hanyue.hmaptoview.View;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.bsz.hanyue.hlocatormodel.Model.Coordinate;
+import com.bsz.hanyue.hlocatormodel.Model.Icon;
+import com.bsz.hanyue.hlocatormodel.Model.Map;
 import com.bsz.hanyue.hmaptoview.Interface.OnIconClickListener;
 import com.bsz.hanyue.hmaptoview.Interface.OnPointInputListener;
-import com.bsz.hanyue.hmaptoview.Model.Coordinate;
-import com.bsz.hanyue.hmaptoview.Model.Icon;
-import com.bsz.hanyue.hmaptoview.Model.Map;
 import com.bsz.hanyue.hmaptoview.R;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by hanyue on 2015/7/26.
+ * Created by hanyue on 2015/7/26
  */
 public class HMapView extends View {
 
     public static final int DEVELOP_MODEL = 0x000001;
     public static final int CUSTOM_MODEL = 0x000002;
 
-    //动画action接收
-    Handler handler = new Handler() {
+    private static class AnimationHandler extends Handler{
+        private final WeakReference<HMapView> hMapViewWeakReference;
+
+        public AnimationHandler(HMapView hMapView) {
+            hMapViewWeakReference = new WeakReference<>(hMapView);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    invalidate();
-                    break;
+            HMapView hMapView = hMapViewWeakReference.get();
+            if(hMapView != null) {
+                switch (msg.what) {
+                    case 0:
+                        hMapView.invalidate();
+                        break;
+                }
+                super.handleMessage(msg);
             }
-            super.handleMessage(msg);
         }
-    };
+    }
+
+    private final AnimationHandler animationHandler = new AnimationHandler(this);
+
     //view model
     int model = CUSTOM_MODEL;
     //监听地图点击事件
@@ -83,13 +93,13 @@ public class HMapView extends View {
         super(context, attrs, defStyleAttr);
         pointInputListeners = new ArrayList<>();
         iconClickListeners = new ArrayList<>();
-        //解析xml属性设置
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.HMapView, defStyleAttr, 0);
-        //得到设置的图片
-        Drawable b = a.getDrawable(R.styleable.HMapView_src);
-        if (b != null) {
-
-        }
+//        //解析xml属性设置
+//        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.HMapView, defStyleAttr, 0);
+//        //得到设置的图片
+//        Drawable b = a.getDrawable(R.styleable.HMapView_src);
+//        if (b != null) {
+//
+//        }
     }
 
     //初始化地图
@@ -97,6 +107,7 @@ public class HMapView extends View {
         initPoint();
         scaleBitmapToFitScreen();
         invalidate();
+        animateTimer.cancel();
     }
 
     //初始化各点
@@ -106,16 +117,16 @@ public class HMapView extends View {
         bubblePoint = new Coordinate(0, 0);
     }
 
-    //将得到的drawalbe转化为bitmap
-    private Bitmap drawableToBitmap(Drawable drawable) {
-        int width = drawable.getIntrinsicWidth();
-        int height = drawable.getIntrinsicHeight();
-        Bitmap bitmap = Bitmap.createBitmap(width, height, drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, width, height);
-        drawable.draw(canvas);
-        return bitmap;
-    }
+//    //将得到的drawalbe转化为bitmap
+//    private Bitmap drawableToBitmap(Drawable drawable) {
+//        int width = drawable.getIntrinsicWidth();
+//        int height = drawable.getIntrinsicHeight();
+//        Bitmap bitmap = Bitmap.createBitmap(width, height, drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
+//        Canvas canvas = new Canvas(bitmap);
+//        drawable.setBounds(0, 0, width, height);
+//        drawable.draw(canvas);
+//        return bitmap;
+//    }
 
     //缩放bitmap以适应屏幕显示
     private void scaleBitmapToFitScreen() {
@@ -153,16 +164,12 @@ public class HMapView extends View {
     private float lastY;
     private int clickCount = 0;
     private long firClick;
-    private long secClick;
 
     /**
      * 触摸事件响应
-     *
-     * @param event
-     * @return
      */
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
 
         switch (event.getAction()) {
             //处理按下事件
@@ -175,8 +182,7 @@ public class HMapView extends View {
                 if (clickCount == 1) {
                     firClick = System.currentTimeMillis();
                 } else if (clickCount == 2) {
-                    secClick = System.currentTimeMillis();
-                    if (secClick - firClick < 300) {
+                    if (System.currentTimeMillis() - firClick < 300) {
                         //双击事件
                         Log.v("map", "double click");
                         invalidate();
@@ -184,7 +190,6 @@ public class HMapView extends View {
                     }
                     clickCount = 0;
                     firClick = 0;
-                    secClick = 0;
                 }
                 //非定位模式下，检测点击位置
                 if (event.getPointerCount() == 1 && !mapLock) {
@@ -301,10 +306,9 @@ public class HMapView extends View {
 
     //将图上坐标转为地理坐标
     private Coordinate inputPointToGeo(Coordinate inputPoint) {
-        Coordinate geoCoordinate = new Coordinate(
+        return  new Coordinate(
                 inputPoint.getX() / bitmapScaleTimes * map.getRuler(),
                 inputPoint.getY() / bitmapScaleTimes * map.getRuler());
-        return geoCoordinate;
     }
 
     //通知点击事件
@@ -334,11 +338,10 @@ public class HMapView extends View {
         animateTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.sendEmptyMessage(0);
+                animationHandler.sendEmptyMessage(0);
                 animateCount++;
             }
         }, 1000 / fps, 1000 / fps);
-
     }
 
     //按图层绘制cavans
