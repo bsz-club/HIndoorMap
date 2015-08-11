@@ -165,6 +165,10 @@ public class WifiScanManager {
         return wifis;
     }
 
+    public Activity getActivity(){
+        return this.activity;
+    }
+
     private void registerWifiScanReceiver(BroadcastReceiver broadcastReceiver) {
         activity.registerReceiver(broadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }

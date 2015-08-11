@@ -6,7 +6,7 @@ import com.bsz.hanyue.hlocatormodel.Model.Wifi;
 import java.util.List;
 
 /**
- * Created by hanyue on 2015/8/11.
+ * Created by hanyue on 2015/8/11
  */
 public interface OnGotCalculateResultListener {
 

@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HIndoorMap.iml" filepath="$PROJECT_DIR$/HIndoorMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androiddownloader/androiddownloader.iml" filepath="$PROJECT_DIR$/androiddownloader/androiddownloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androidlog/androidlog.iml" filepath="$PROJECT_DIR$/androidlog/androidlog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androidmultithread/androidmultithread.iml" filepath="$PROJECT_DIR$/androidmultithread/androidmultithread.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/hlocatormodel/hlocatormodel.iml" filepath="$PROJECT_DIR$/hlocatormodel/hlocatormodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/hmaptoview/hmaptoview.iml" filepath="$PROJECT_DIR$/hmaptoview/hmaptoview.iml" />

@@ -2,6 +2,10 @@ package com.bsz.hanyue.hlocatormodel.Model;
 
 import android.graphics.Bitmap;
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -16,6 +20,11 @@ public class Map {
     float ruler;//m per px
     List<Icon> iconList;
     Coordinate pointO;
+
+    public static Map parseFromJsonArr(JSONObject jsonObject){
+        new Map();
+        return new Gson().fromJson(jsonObject.toString(),Map.class);
+    }
 
     public int getFloor() {
         return floor;

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.androidquery.AQuery;
 import com.bsz.hanyue.hlocatormodel.Model.Map;
 import com.bsz.hanyue.hlocatormodel.Model.Wifi;
 import com.bsz.hanyue.hwifilocator.Interface.OnGotCalculateResultListener;

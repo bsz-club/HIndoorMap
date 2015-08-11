@@ -1,11 +1,27 @@
 package com.bsz.hanyue.hwifilocator.Utils;
 
+import android.app.Activity;
+import android.graphics.BitmapFactory;
+
+import com.bsz.hanyue.androiddownloader.DownloadListener;
+import com.bsz.hanyue.androiddownloader.DownloadManager;
+import com.bsz.hanyue.androiddownloader.DownloadTask;
+import com.bsz.hanyue.androiddownloader.DownloadType;
+import com.bsz.hanyue.hlocatormodel.Model.Map;
 import com.bsz.hanyue.hlocatormodel.Model.Wifi;
 import com.bsz.hanyue.hwifilocator.Interface.OnGotCalculateResultListener;
 import com.bsz.hanyue.hwifilocator.Interface.OnGotWifiResultListener;
+import com.bsz.hanyue.hwifilocator.NetWork.NetUtils;
+import com.bsz.hanyue.hwifilocator.NetWork.RequestRawDataCallBack;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,9 +29,10 @@ import java.util.List;
  */
 public class ScanLimitModelManager {
 
+    private Activity activity;
     private WifiScanManager wifiScanManager;
     private DatabaseManager databaseManager;
-    private ResultCalculator resultCalculator;
+    private static ResultCalculator resultCalculator;
 
     private OnGotWifiResultListener onGotWifiResultListener;
     private Wifi wifi;
@@ -25,11 +42,12 @@ public class ScanLimitModelManager {
     public ScanLimitModelManager(WifiScanManager wifiScanManager, DatabaseManager databaseManager) {
         this.wifiScanManager = wifiScanManager;
         this.databaseManager = databaseManager;
+        this.activity = wifiScanManager.getActivity();
         timesLimit();
     }
 
     public ResultCalculator timesLimit() {
-        if (resultCalculator == null){
+        if (resultCalculator == null) {
             resultCalculator = new ResultCalculator();
         }
         initState();
@@ -47,7 +65,7 @@ public class ScanLimitModelManager {
     }
 
     public ResultCalculator 距离最近的WIFI的储存次数为限() {
-        if (resultCalculator == null){
+        if (resultCalculator == null) {
             resultCalculator = new ResultCalculator();
         }
         initState();
@@ -68,7 +86,7 @@ public class ScanLimitModelManager {
     }
 
     public ResultCalculator 时间为限() {
-        if (resultCalculator == null){
+        if (resultCalculator == null) {
             resultCalculator = new ResultCalculator();
         }
         initState();
@@ -107,16 +125,17 @@ public class ScanLimitModelManager {
 
         private OnGotCalculateResultListener onGotCalculateResultListener;
 
-        private void Calculate(DatabaseManager databaseManager){
+        private void Calculate(DatabaseManager databaseManager) {
             List<Wifi> properWifis = getProperValue(databaseManager);
             databaseManager.clearPreWifi();
-            if (onGotCalculateResultListener != null){
+            if (onGotCalculateResultListener != null) {
                 onGotCalculateResultListener.getWifiEnvironment(properWifis);
             }
+            getMapByProperValue(properWifis);
         }
 
-        //得到临时数据库内wifi的特征值
-        private List<Wifi> getProperValue(DatabaseManager databaseManager){
+        //得到临时数据库内wifi的特征值(特征值算法)
+        private List<Wifi> getProperValue(DatabaseManager databaseManager) {
             return getAverageWifis(databaseManager);
         }
 
@@ -158,7 +177,46 @@ public class ScanLimitModelManager {
             return wifi;
         }
 
-        public void setOnGotCalculateResultListener(OnGotCalculateResultListener onGotCalculateResultListener){
+        private void getMapByProperValue(List<Wifi> wifis) {
+            //getFromService(wifis);
+            getFromLocalDatabase(wifis);
+        }
+
+        private void getFromService(List<Wifi> wifis){
+            HashMap hashMap = new HashMap();
+            String wifisString = new Gson().toJson(wifis);
+            hashMap.put("wifis", wifisString);
+            NetUtils.post(activity, NetUtils.buildUrl(NetUtils.SEND_WIFI_ENVIRONMENT), hashMap, new RequestRawDataCallBack(activity) {
+                @Override
+                public void OnSuccess(Object jasonObject) throws JsonSyntaxException, JSONException {
+                    super.OnSuccess(jasonObject);
+                    if ((jasonObject != null) && (jasonObject.toString().length() != 0)) {
+                        final Map map = Map.parseFromJsonArr((JSONObject) jasonObject);
+                        DownloadTask task = new DownloadTask(activity);
+                        task.setUrl(map.getMapimageurl());
+                        task.setName("" + map.getId());
+                        task.setType(DownloadType.TYPE_IMAGE);
+                        DownloadListener downloadListener = new DownloadListener<Integer, DownloadTask>() {
+                            @Override
+                            public void onSuccess(DownloadTask downloadTask) {
+                                super.onSuccess(downloadTask);
+                                map.setMapimage(BitmapFactory.decodeFile(downloadTask.getPath()));
+                                onGotCalculateResultListener.getMap(map);//发送下载好的map
+                            }
+                        };
+                        DownloadManager downloadManager = new DownloadManager(activity);
+                        downloadManager.add(task, downloadListener);
+                        downloadManager.start(task, downloadListener);
+                    }
+                }
+            });
+        }
+
+        private void getFromLocalDatabase(List<Wifi> wifis){
+
+        }
+
+        public void setOnGotCalculateResultListener(OnGotCalculateResultListener onGotCalculateResultListener) {
             this.onGotCalculateResultListener = onGotCalculateResultListener;
         }
 

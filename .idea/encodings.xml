@@ -4,18 +4,11 @@
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/Interface/HImageLoadListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/Interface/OnIconClickListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/Interface/OnPointInputListener.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/Model/Bubble.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/Model/Coordinate.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/Model/Icon.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/Model/LocationPoint.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/Model/Map.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/java/com/bsz/hanyue/hmaptoview/View/HMapView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/res/mipmap/ic_launcher.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/res/mipmap/qunguangguangchang7.jpg" charset="GBK" />
     <file url="file://$PROJECT_DIR$/hmaptoview/src/main/res/values/attrs.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Interface/OnGotWifiResultListener.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Interface/OnLimitListener.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Model/Wifi.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Utils/DatabaseHelper.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Utils/DatabaseManager.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hwifilocator/src/main/java/com/bsz/hanyue/hwifilocator/Utils/ScanLimitModelManager.java" charset="UTF-8" />

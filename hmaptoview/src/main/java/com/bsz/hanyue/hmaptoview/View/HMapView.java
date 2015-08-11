@@ -37,7 +37,7 @@ public class HMapView extends View {
     public static final int DEVELOP_MODEL = 0x000001;
     public static final int CUSTOM_MODEL = 0x000002;
 
-    private static class AnimationHandler extends Handler{
+    private static class AnimationHandler extends Handler {
         private final WeakReference<HMapView> hMapViewWeakReference;
 
         public AnimationHandler(HMapView hMapView) {
@@ -47,7 +47,7 @@ public class HMapView extends View {
         @Override
         public void handleMessage(Message msg) {
             HMapView hMapView = hMapViewWeakReference.get();
-            if(hMapView != null) {
+            if (hMapView != null) {
                 switch (msg.what) {
                     case 0:
                         hMapView.invalidate();
@@ -130,21 +130,23 @@ public class HMapView extends View {
 
     //缩放bitmap以适应屏幕显示
     private void scaleBitmapToFitScreen() {
-        bitmapDisplay = map.getMapimage();
-        float times1;
-        float times2;
-        float w = getWidth();
-        float h = getHeight();
-        float bW = bitmapDisplay.getWidth();
-        float bH = bitmapDisplay.getHeight();
-        times1 = w / bW;
-        times2 = h / bH;
-        if (times1 > times2) {
-            bitmapScaleTimes = times1;
-        } else {
-            bitmapScaleTimes = times2;
+        if (map.getMapimage() != bitmapDisplay) {
+            bitmapDisplay = map.getMapimage();
+            float times1;
+            float times2;
+            float w = getWidth();
+            float h = getHeight();
+            float bW = bitmapDisplay.getWidth();
+            float bH = bitmapDisplay.getHeight();
+            times1 = w / bW;
+            times2 = h / bH;
+            if (times1 > times2) {
+                bitmapScaleTimes = times1;
+            } else {
+                bitmapScaleTimes = times2;
+            }
+            scaleBitmap();
         }
-        scaleBitmap();
     }
 
     //缩放缓存图片为显示图片
@@ -231,7 +233,7 @@ public class HMapView extends View {
     private void getInputPoint(float x, float y) {
         float dx = x - pointO.getX();
         float dy = y - pointO.getY();
-        Coordinate inputPoint = new Coordinate(dx,dy);
+        Coordinate inputPoint = new Coordinate(dx, dy);
         if (model == CUSTOM_MODEL) {
             isIcon(inputPoint);
         }
@@ -306,7 +308,7 @@ public class HMapView extends View {
 
     //将图上坐标转为地理坐标
     private Coordinate inputPointToGeo(Coordinate inputPoint) {
-        return  new Coordinate(
+        return new Coordinate(
                 inputPoint.getX() / bitmapScaleTimes * map.getRuler(),
                 inputPoint.getY() / bitmapScaleTimes * map.getRuler());
     }
@@ -435,7 +437,7 @@ public class HMapView extends View {
         Paint paint = new Paint();
         paint.setColor(Color.GREEN);
         if (geoInPicPoint != null) {
-            if (!(geoInPicPoint.getX()==0&&geoInPicPoint.getY()==0)) {
+            if (!(geoInPicPoint.getX() == 0 && geoInPicPoint.getY() == 0)) {
                 canvas.drawCircle(geoInPicPoint.getX(), geoInPicPoint.getY(), 20, paint);
             }
         }
@@ -502,15 +504,15 @@ public class HMapView extends View {
         initView();
     }
 
-    public void lockMap(){
+    public void lockMap() {
         mapLock = true;
     }
 
-    public void unLockMap(){
+    public void unLockMap() {
         mapLock = false;
     }
 
-    public void setModel(int model){
+    public void setModel(int model) {
         this.model = model;
     }
 

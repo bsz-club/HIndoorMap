@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class LocatorRunController {
 
-    private WifiScanManager wifiScanManager;
-    private DatabaseManager databaseManager;
-    private ScanLimitModelManager scanLimitModelManager;
+    private static WifiScanManager wifiScanManager;
+    private static DatabaseManager databaseManager;
+    private static ScanLimitModelManager scanLimitModelManager;
 
     public LocatorRunController(Activity activity){
         if (databaseManager == null) {

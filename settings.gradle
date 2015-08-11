@@ -1,1 +1,1 @@
-include ':app', ':hmaptoview', ':hwifilocator', ':hlocatormodel', ':hlocatormodel'
+include ':app', ':hmaptoview', ':hwifilocator', ':hlocatormodel', ':hlocatormodel', ':androidlog', ':androidmultithread', ':androiddownloader'
